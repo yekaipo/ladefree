@@ -209,7 +209,7 @@ install_lade_cli() {
     echo -e "${YELLOW}Lade CLI 未安装。正在尝试自动安装 Lade CLI...${NC}"
 
     local lade_release_url="https://github.com/lade-io/lade/releases"
-    local lade_temp_dir="/tmp/lade_cli_download_temp_$$"
+    local lade_temp_dir="/tmp/lade_cli_download_temp"
     mkdir -p "${lade_temp_dir}"
 
     local os_type=$(uname -s | tr '[:upper:]' '[:lower:]')
