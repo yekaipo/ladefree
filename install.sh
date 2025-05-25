@@ -171,7 +171,7 @@ delete_app() {
     if [ "${CONFIRM_DELETE}" == "y" ]; then
         lade apps remove "${APP_TO_DELETE}"
         if [ $? -ne 0 ]; then
-            echo -e "${RED}错误：删除应用 '${APP_TO_DELETE}' 失败。请检查应用名称是否正确或您是否有权限。${NC}"
+            echo -e "${RED}错误：删除应用 '${APP_TO_DELETE}' 失败。请检查应用名称是否正 确或您是否有权限。${NC}"
         else
             echo -e "${GREEN}应用 '${APP_TO_DELETE}' 已成功删除。${NC}"
         fi
@@ -260,7 +260,7 @@ install_lade_cli() {
         *) echo -e "${RED}错误：不支持的操作系统：${os_type}${NC}"; rm -rf "${lade_temp_dir}" || true; exit 1 ;;
     esac
 
-    if ! command_exists curl; then echo -e "${RED}错误：'curl' 命令未找到。请安装 curl 后再运行此脚本。${NC}"; rm -rf "${lade_temp_dir}" || true; exit 1; fi
+    if ! command_exists curl; then echo -e "${RED}错误：'curl' 命令未找到。请安装 curl  后再运行此脚本。${NC}"; rm -rf "${lade_temp_dir}" || true; exit 1; fi
     if [ "${file_extension}" == ".tar.gz" ] && ! command_exists tar; then echo -e "${RED}错误：'tar' 命令未找到。请安装 tar 后再运行此脚本。${NC}"; rm -rf "${lade_temp_dir}" || true; exit 1; fi
     if [ "${file_extension}" == ".zip" ] && ! command_exists unzip; then echo -e "${RED}错误：'unzip' 命令未找到。请安装 unzip 后再运行此脚本。${NC}"; rm -rf "${lade_temp_dir}" || true; exit 1; fi
     if ! command_exists awk; then echo -e "${RED}错误：'awk' 命令未找到。请安装 awk 后再运行此脚本。${NC}"; rm -rf "${lade_temp_dir}" || true; exit 1; fi
@@ -280,19 +280,14 @@ install_lade_cli() {
     if ! curl -L --fail -o "${temp_archive}" "${download_url}"; then echo -e "${RED}错误：下载 Lade CLI 失败。请检查网络连接或 URL 是否正确。${NC}"; rm -rf "${lade_temp_dir}" || true; exit 1; fi
 
     echo "下载完成，正在解压..."
-    if [ "${file_extension}" == ".tar.gz" ]; then if ! tar -xzf "${temp_archive}" -C "${lade_temp_dir}"; then echo -e "${RED}错误：解压 .tar.gz 文件失败。${NC}"; rm -rf "${lade_temp_dir}" || true; exit 1; fi
-    elif [ "${file_extension}" == ".zip" ]; then if ! unzip "${temp_archive}" -d "${lade_temp_dir}"; then echo -e "${RED}错误：解压 .zip 文件失败。${NC}"; rm -rf "${lade_temp_dir}" || true; exit 1; fi
-    else echo -e "${RED}错误：不支持的压缩文件格式：${file_extension}${NC}"; rm -rf "${lade_temp_dir}" || true; exit 1; fi
-
-    local extracted_lade_path=$(find "${lade_temp_dir}" -type f -name "${LADE_CLI_NAME}" -perm +111 2>/dev/null | head -n 1)
-    if [ -z "${extracted_lade_path}" ]; then echo -e "${RED}错误：在解压后的临时目录中未找到 '${LADE_CLI_NAME}' 可执行文件。请检查压缩包内容。${NC}"; rm -rf "${lade_temp_dir}" || true; exit 1; fi
-
-    echo "正在将 Lade CLI 移动到 ${LADE_INSTALL_PATH}..."
-    if ! sudo mv "${extracted_lade_path}" "${LADE_INSTALL_PATH}"; then echo -e "${RED}错误：移动 Lade CLI 文件失败。可能需要管理员权限或目录不存在。${NC}"; rm -rf "${lade_temp_dir}" || true; exit 1; fi
+    tar -xzvf lade-linux-amd64.tar.gz
+      sudo mv lade $LADE_INSTALL_PATH
     sudo chmod +x "${LADE_INSTALL_PATH}"
 
-    echo -e "${GREEN}Lade CLI 已成功下载、解压并安装到 ${LADE_INSTALL_PATH}${NC}"
-    rm -rf "${lade_temp_dir}" || true
+
+
+
+
     return 0
 }
 
